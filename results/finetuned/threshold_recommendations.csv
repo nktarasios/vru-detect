@@ -1,0 +1,4 @@
+class_id,class_name,threshold,precision,recall,f1,rationale
+2,bike,0.15,0.42424242424242425,0.208955223880597,0.27999999999999997,Selected by best F1 with recall and precision as tie-breakers.
+0,person,0.05,0.2905982905982906,0.6052356020942409,0.39266304347826086,"Selected from thresholds within 95% of max recall, then highest precision; missed person/rider VRUs are prioritized over false positives."
+1,rider,0.05,0.2191780821917808,0.43243243243243246,0.2909090909090909,"Selected from thresholds within 95% of max recall, then highest precision; missed person/rider VRUs are prioritized over false positives."

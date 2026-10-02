@@ -1,0 +1,32 @@
+[
+  {
+    "name": "synthetic_0001.jpg",
+    "width": 100,
+    "height": 80,
+    "attributes": {
+      "weather": "clear",
+      "timeofday": "daytime",
+      "scene": "city street"
+    },
+    "labels": [
+      {
+        "category": "person",
+        "box2d": {
+          "x1": 10,
+          "y1": 20,
+          "x2": 30,
+          "y2": 60
+        }
+      },
+      {
+        "category": "car",
+        "box2d": {
+          "x1": 40,
+          "y1": 20,
+          "x2": 90,
+          "y2": 70
+        }
+      }
+    ]
+  }
+]

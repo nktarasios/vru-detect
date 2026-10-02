@@ -1,0 +1,18 @@
+data/raw/
+data/downloads/
+data/demo_images/
+data/processed/images/
+data/processed/labels/
+models/*.pt
+models/runs/
+__pycache__/
+.venv/
+*.pyc
+.DS_Store
+outputs/
+runs/
+# Keep results/ tables and charts in git for reproducibility of reported numbers
+*.pt
+!configs/**
+data/processed/conditions.csv
+data/processed/dataset.yaml

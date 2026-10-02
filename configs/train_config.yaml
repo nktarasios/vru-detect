@@ -1,0 +1,15 @@
+model: yolo26n.pt
+epochs: 10
+imgsz: 416
+batch: 8
+device: null  # auto: cuda if available else cpu
+patience: 5
+workers: 2
+# Class imbalance: oversample images containing VRU classes
+vru_oversample_factor: 3
+# Subset sizes for pipeline validation / full runs
+subset:
+  train: null  # null = all
+  val: null
+project: models/runs
+name: vru_finetune

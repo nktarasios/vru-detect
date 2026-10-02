@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VRU-Detect · Where detectors miss the people they should protect</title>
+<meta name="description" content="A perception evaluation case study: measure vulnerable-road-user failures under night, weather, and size conditions, then show what fine-tuning and deliberate thresholds actually change.">
+<meta property="og:title" content="VRU-Detect · A perception evaluation case study">
+<meta property="og:description" content="Fine-tuning lifted aggregate precision from 0.396 to 0.685. The honest headline: night-person and small-object recall remain the gaps.">
+<meta property="og:image" content="https://nktarasios.github.io/vru-detect/assets/failure_modes_recall.png">
+<style>
+  :root {
+    --ink: #0b0b0b;
+    --sec: #52514e;
+    --muted: #898781;
+    --grid: #e1e0d9;
+    --axis: #c3c2b7;
+    --bg: #f9f9f7;
+    --surface: #fcfcfb;
+    --line: #e6e4e0;
+    --blue: #2a78d6;
+    --orange: #eb6834;
+    --base-gray: #898781;
+    --good: #006300;
+    --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+    --serif: Georgia, "Times New Roman", serif;
+    --sans: system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--ink); font: 16px/1.7 var(--sans); -webkit-font-smoothing: antialiased; }
+  a { color: inherit; }
+  main { max-width: 860px; margin: 0 auto; padding: 0 1.5rem 5rem; }
+
+  .nav { display: flex; justify-content: space-between; align-items: baseline; padding: 2rem 0 0; font-family: var(--mono); font-size: 0.8rem; }
+  .nav a { text-decoration: none; color: var(--sec); }
+  .nav a:hover { color: var(--ink); }
+  .nav .name { color: var(--ink); font-weight: 600; }
+  .nav .right { display: flex; gap: 1.4rem; flex-wrap: wrap; }
+
+  .label { font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.04em; color: var(--muted); margin: 4.5rem 0 1.1rem; }
+  .hero { margin-top: 4.5rem; }
+  h1 { font-family: var(--serif); font-weight: 400; font-size: 2.4rem; line-height: 1.2; letter-spacing: -0.01em; max-width: 22ch; }
+  h1 em { font-style: italic; }
+  .lede { margin-top: 1.3rem; color: var(--sec); font-size: 1.05rem; max-width: 60ch; }
+
+  .stats { display: flex; gap: 2.5rem; flex-wrap: wrap; margin-top: 2rem; }
+  .stat .n { font-family: var(--serif); font-size: 1.7rem; }
+  .stat .n .up { color: var(--good); font-size: 1.05rem; font-family: var(--sans); }
+  .stat .k { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.05em; color: var(--muted); margin-top: 0.15rem; }
+  .stat.gap .n { color: var(--orange); }
+
+  h2 { font-family: var(--serif); font-weight: 400; font-size: 1.55rem; letter-spacing: -0.01em; }
+  .section { border-top: 1px solid var(--line); margin-top: 3.5rem; padding-top: 2.5rem; }
+  .section > p.intro { margin-top: 0.9rem; color: var(--sec); max-width: 62ch; }
+  .section > p.intro b { color: var(--ink); font-weight: 600; }
+
+  .fig { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 1.4rem 1.5rem 1.1rem; margin-top: 1.6rem; }
+  .fig h3 { font-family: var(--sans); font-size: 0.95rem; font-weight: 600; }
+  .fig .sub { font-size: 0.85rem; color: var(--muted); margin-top: 0.15rem; }
+  .legend { display: flex; gap: 1.4rem; flex-wrap: wrap; margin-top: 0.8rem; font-size: 0.8rem; color: var(--sec); }
+  .legend span::before { content: ""; display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 0.45rem; vertical-align: -1px; }
+  .legend .base::before { background: var(--base-gray); }
+  .legend .ft::before { background: var(--blue); }
+  .legend .prec::before { background: var(--blue); }
+  .legend .rec::before { background: var(--orange); }
+  .fig svg { width: 100%; height: auto; display: block; margin-top: 0.9rem; font-family: var(--sans); }
+  .fig .note { font-size: 0.82rem; color: var(--muted); margin-top: 0.8rem; }
+  .fig .note b { color: var(--sec); }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.6rem; }
+  @media (max-width: 700px) { .grid2 { grid-template-columns: 1fr; } }
+
+  svg text { font-size: 11px; fill: var(--sec); }
+  svg .tick { fill: var(--muted); font-size: 10px; }
+  svg .val { font-size: 10.5px; }
+  svg .val.ft { fill: var(--ink); font-weight: 600; }
+  svg .val.base { fill: var(--muted); }
+  svg .cls { font-size: 11.5px; fill: var(--ink); }
+  svg .delta { fill: var(--good); font-weight: 600; font-size: 10.5px; }
+  svg .gridline { stroke: var(--grid); stroke-width: 1; }
+  svg .axis { stroke: var(--axis); stroke-width: 1; }
+  svg .chosen { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 4 4; }
+
+  .steps { counter-reset: s; margin-top: 1.4rem; display: grid; gap: 0.9rem; }
+  .step { display: flex; gap: 1rem; align-items: baseline; }
+  .step::before { counter-increment: s; content: "0" counter(s); font-family: var(--mono); font-size: 0.78rem; color: var(--muted); }
+  .step p { color: var(--sec); max-width: 58ch; }
+  .step p b { color: var(--ink); font-weight: 600; }
+
+  table { border-collapse: collapse; width: 100%; margin-top: 1.4rem; font-size: 0.92rem; }
+  th { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.05em; color: var(--muted); text-align: left; font-weight: 500; padding: 0.5rem 1rem 0.5rem 0; border-bottom: 1px solid var(--line); }
+  td { padding: 0.6rem 1rem 0.6rem 0; border-bottom: 1px solid var(--line); color: var(--sec); vertical-align: top; }
+  td:first-child { color: var(--ink); font-weight: 600; white-space: nowrap; }
+  td.num { font-family: var(--mono); font-size: 0.85rem; white-space: nowrap; }
+
+  /* threshold explorer */
+  .explorer { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 1.4rem 1.5rem; margin-top: 1.6rem; }
+  .explorer h3 { font-family: var(--sans); font-size: 0.95rem; font-weight: 600; }
+  .explorer .sub { font-size: 0.85rem; color: var(--muted); margin-top: 0.15rem; }
+  .exp-slider { display: flex; align-items: center; gap: 1rem; margin-top: 1.2rem; }
+  .exp-slider input { flex: 1; accent-color: var(--blue); }
+  .exp-slider .tval { font-family: var(--mono); font-size: 0.95rem; min-width: 3.2em; text-align: right; }
+  .exp-tiles { display: flex; gap: 2.2rem; flex-wrap: wrap; margin-top: 1.1rem; }
+  .exp-tile .n { font-family: var(--serif); font-size: 1.5rem; }
+  .exp-tile .k { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.05em; color: var(--muted); margin-top: 0.1rem; }
+  .exp-tile.miss .n { color: var(--orange); }
+  .glyphs { display: flex; gap: 0.3rem; flex-wrap: wrap; margin-top: 1.2rem; }
+  .glyphs svg { width: 16px; height: 30px; }
+  .glyphs .cap { width: 100%; font-size: 0.78rem; color: var(--muted); margin-top: 0.35rem; }
+  .exp-read { margin-top: 1rem; font-size: 0.9rem; color: var(--sec); max-width: 62ch; }
+  .exp-read b { color: var(--ink); }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1.1rem; margin-top: 1.4rem; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 1.15rem 1.3rem; }
+  .card h3 { font-family: var(--sans); font-size: 0.92rem; font-weight: 600; }
+  .card p { font-size: 0.9rem; color: var(--sec); margin-top: 0.45rem; }
+
+  .links { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-top: 1.6rem; font-family: var(--mono); font-size: 0.8rem; }
+  .links a { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--line); padding-bottom: 1px; }
+  .links a:hover { border-bottom-color: var(--ink); }
+
+  footer { border-top: 1px solid var(--line); margin-top: 4rem; padding-top: 1.6rem; display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; font-family: var(--mono); font-size: 0.78rem; color: var(--muted); }
+  footer a { color: var(--muted); text-decoration: none; }
+  footer a:hover { color: var(--ink); }
+  @media (max-width: 560px) { h1 { font-size: 1.9rem; } .stats { gap: 1.6rem; } }
+</style>
+</head>
+<body>
+<main>
+  <nav class="nav">
+    <a class="name" href="#top">VRU-Detect</a>
+    <span class="right">
+      <a href="#results">Results</a>
+      <a href="#gaps">The gaps</a>
+      <a href="#thresholds">Thresholds</a>
+      <a href="#method">Method</a>
+      <a href="#limits">Limits</a>
+      <a href="https://github.com/nktarasios/vru-detect">GitHub ↗</a>
+    </span>
+  </nav>
+
+  <header class="hero" id="top">
+    <p class="label">/ Perception evaluation case study</p>
+    <h1>See where detectors miss <em>the people they should protect.</em></h1>
+    <p class="lede">Off-the-shelf detectors can look fine on aggregate metrics while missing exactly the road users who matter most: small, distant, or poorly lit pedestrians and cyclists. VRU-Detect measures that failure honestly on BDD100K road scenes, fine-tunes, and chooses operating thresholds with an explicit miss-cost argument.</p>
+    <div class="stats">
+      <div class="stat"><div class="n">0.396 <span class="up">→</span> 0.685</div><div class="k">aggregate precision, baseline → fine-tuned</div></div>
+      <div class="stat"><div class="n">0.248 <span class="up">→</span> 0.335</div><div class="k">aggregate recall, baseline → fine-tuned</div></div>
+      <div class="stat gap"><div class="n">0.262</div><div class="k">night-person recall after tuning. still the gap</div></div>
+    </div>
+  </header>
+
+  <section class="section" id="results">
+    <h2>Fine-tuning changed the failure shape, not just the score</h2>
+    <p class="intro">Same 300-image validation split, confidence 0.25. The baseline's pathology was <b>rider false positives</b> (COCO confuses person and bike); fine-tuning collapsed those while lifting person and bike recall. Aggregate numbers improved, and the residual risk moved somewhere specific.</p>
+
+    <div class="grid2">
+      <div class="fig">
+        <h3>Precision by class</h3>
+        <p class="sub">conf = 0.25</p>
+        <div class="legend"><span class="base">Baseline (COCO YOLO26n)</span><span class="ft">Fine-tuned</span></div>
+        <svg viewBox="0 0 440 232" role="img" aria-label="Grouped bar chart of precision by class, baseline versus fine-tuned. Person 0.754 to 0.689, rider 0.039 to 0.632, bike 0.714 to 0.625, all classes 0.396 to 0.685.">
+          <line class="gridline" x1="240" y1="8" x2="240" y2="204"/>
+          <line class="gridline" x1="410" y1="8" x2="410" y2="204"/>
+          <line class="axis" x1="70" y1="8" x2="70" y2="204"/>
+          <text class="tick" x="240" y="220" text-anchor="middle">0.5</text>
+          <text class="tick" x="410" y="220" text-anchor="middle">1.0</text>
+          <text class="cls" x="0" y="30">person</text>
+          <rect x="70" y="16" width="256" height="12" rx="3" fill="var(--base-gray)"><title>person · baseline precision 0.754</title></rect>
+          <rect x="70" y="32" width="234" height="12" rx="3" fill="var(--blue)"><title>person · fine-tuned precision 0.689</title></rect>
+          <text class="val base" x="331" y="26">.754</text>
+          <text class="val ft" x="309" y="42">.689</text>
+          <text class="cls" x="0" y="78">rider</text>
+          <rect x="70" y="64" width="13" height="12" rx="3" fill="var(--base-gray)"><title>rider · baseline precision 0.039</title></rect>
+          <rect x="70" y="80" width="215" height="12" rx="3" fill="var(--blue)"><title>rider · fine-tuned precision 0.632</title></rect>
+          <text class="val base" x="88" y="74">.039</text>
+          <text class="val ft" x="290" y="90">.632</text>
+          <text class="cls" x="0" y="126">bike</text>
+          <rect x="70" y="112" width="243" height="12" rx="3" fill="var(--base-gray)"><title>bike · baseline precision 0.714</title></rect>
+          <rect x="70" y="128" width="213" height="12" rx="3" fill="var(--blue)"><title>bike · fine-tuned precision 0.625</title></rect>
+          <text class="val base" x="318" y="122">.714</text>
+          <text class="val ft" x="288" y="138">.625</text>
+          <text class="cls" x="0" y="174">all</text>
+          <rect x="70" y="160" width="135" height="12" rx="3" fill="var(--base-gray)"><title>all classes · baseline precision 0.396</title></rect>
+          <rect x="70" y="176" width="233" height="12" rx="3" fill="var(--blue)"><title>all classes · fine-tuned precision 0.685</title></rect>
+          <text class="val base" x="210" y="170">.396</text>
+          <text class="val ft" x="308" y="186">.685</text>
+        </svg>
+      </div>
+
+      <div class="fig">
+        <h3>Recall by class</h3>
+        <p class="sub">conf = 0.25</p>
+        <div class="legend"><span class="base">Baseline (COCO YOLO26n)</span><span class="ft">Fine-tuned</span></div>
+        <svg viewBox="0 0 440 232" role="img" aria-label="Grouped bar chart of recall by class, baseline versus fine-tuned. Person 0.257 to 0.349, rider 0.351 to 0.324, bike 0.075 to 0.149, all classes 0.248 to 0.335.">
+          <line class="gridline" x1="240" y1="8" x2="240" y2="204"/>
+          <line class="gridline" x1="410" y1="8" x2="410" y2="204"/>
+          <line class="axis" x1="70" y1="8" x2="70" y2="204"/>
+          <text class="tick" x="240" y="220" text-anchor="middle">0.5</text>
+          <text class="tick" x="410" y="220" text-anchor="middle">1.0</text>
+          <text class="cls" x="0" y="30">person</text>
+          <rect x="70" y="16" width="87" height="12" rx="3" fill="var(--base-gray)"><title>person · baseline recall 0.257</title></rect>
+          <rect x="70" y="32" width="119" height="12" rx="3" fill="var(--blue)"><title>person · fine-tuned recall 0.349</title></rect>
+          <text class="val base" x="162" y="26">.257</text>
+          <text class="val ft" x="194" y="42">.349</text>
+          <text class="cls" x="0" y="78">rider</text>
+          <rect x="70" y="64" width="119" height="12" rx="3" fill="var(--base-gray)"><title>rider · baseline recall 0.351</title></rect>
+          <rect x="70" y="80" width="110" height="12" rx="3" fill="var(--blue)"><title>rider · fine-tuned recall 0.324</title></rect>
+          <text class="val base" x="194" y="74">.351</text>
+          <text class="val ft" x="185" y="90">.324</text>
+          <text class="cls" x="0" y="126">bike</text>
+          <rect x="70" y="112" width="26" height="12" rx="3" fill="var(--base-gray)"><title>bike · baseline recall 0.075</title></rect>
+          <rect x="70" y="128" width="51" height="12" rx="3" fill="var(--blue)"><title>bike · fine-tuned recall 0.149</title></rect>
+          <text class="val base" x="101" y="122">.075</text>
+          <text class="val ft" x="126" y="138">.149</text>
+          <text class="cls" x="0" y="174">all</text>
+          <rect x="70" y="160" width="84" height="12" rx="3" fill="var(--base-gray)"><title>all classes · baseline recall 0.248</title></rect>
+          <rect x="70" y="176" width="114" height="12" rx="3" fill="var(--blue)"><title>all classes · fine-tuned recall 0.335</title></rect>
+          <text class="val base" x="159" y="170">.248</text>
+          <text class="val ft" x="189" y="186">.335</text>
+        </svg>
+      </div>
+    </div>
+    <p class="fig note" style="border:none;background:none;padding:0.6rem 0 0;">Person precision dips slightly (.754 → .689) while person recall rises, an acceptable trade <b>when a missed pedestrian costs more than a false alarm</b>. That judgment, not the score, is the product decision.</p>
+  </section>
+
+  <section class="section" id="gaps">
+    <h2>Where the risk still lives</h2>
+    <p class="intro">Stratified recall under the conditions that matter for urban safety. Every condition improved. <b>None of them is solved</b>, and small objects barely moved. This chart is the reason the project exists: aggregate mAP hides exactly these rows.</p>
+
+    <div class="fig">
+      <h3>Hard-condition recall, baseline → fine-tuned</h3>
+      <p class="sub">validation split, conf = 0.25</p>
+      <div class="legend"><span class="base">Baseline</span><span class="ft">Fine-tuned</span></div>
+      <svg viewBox="0 0 640 250" role="img" aria-label="Dumbbell chart of recall change by condition. Night all 0.146 to 0.241. Night person 0.145 to 0.262. Small objects 0.003 to 0.079. Medium objects 0.185 to 0.335. City street 0.242 to 0.342.">
+        <line class="gridline" x1="248" y1="10" x2="248" y2="212"/>
+        <line class="gridline" x1="365" y1="10" x2="365" y2="212"/>
+        <line class="gridline" x1="483" y1="10" x2="483" y2="212"/>
+        <line class="gridline" x1="600" y1="10" x2="600" y2="212"/>
+        <line class="axis" x1="130" y1="10" x2="130" y2="212"/>
+        <text class="tick" x="130" y="228" text-anchor="middle">0</text>
+        <text class="tick" x="248" y="228" text-anchor="middle">0.1</text>
+        <text class="tick" x="365" y="228" text-anchor="middle">0.2</text>
+        <text class="tick" x="483" y="228" text-anchor="middle">0.3</text>
+        <text class="tick" x="600" y="228" text-anchor="middle">0.4</text>
+        <g><title>Night (all): 0.146 → 0.241, +0.095</title>
+          <text class="cls" x="0" y="34">Night (all)</text>
+          <line x1="302" y1="30" x2="413" y2="30" stroke="var(--axis)" stroke-width="2"/>
+          <circle cx="302" cy="30" r="5" fill="var(--base-gray)"/>
+          <circle cx="413" cy="30" r="5" fill="var(--blue)"/>
+          <text class="delta" x="425" y="34">+0.095</text>
+        </g>
+        <g><title>Night person: 0.145 → 0.262, +0.116</title>
+          <text class="cls" x="0" y="76">Night person</text>
+          <line x1="300" y1="72" x2="438" y2="72" stroke="var(--axis)" stroke-width="2"/>
+          <circle cx="300" cy="72" r="5" fill="var(--base-gray)"/>
+          <circle cx="438" cy="72" r="5" fill="var(--blue)"/>
+          <text class="delta" x="450" y="76">+0.116</text>
+        </g>
+        <g><title>Small objects: 0.003 → 0.079, +0.076</title>
+          <text class="cls" x="0" y="118">Small objects</text>
+          <line x1="134" y1="114" x2="223" y2="114" stroke="var(--axis)" stroke-width="2"/>
+          <circle cx="134" cy="114" r="5" fill="var(--base-gray)"/>
+          <circle cx="223" cy="114" r="5" fill="var(--blue)"/>
+          <text class="delta" x="235" y="118">+0.076</text>
+        </g>
+        <g><title>Medium objects: 0.185 → 0.335, +0.150</title>
+          <text class="cls" x="0" y="160">Medium objects</text>
+          <line x1="347" y1="156" x2="524" y2="156" stroke="var(--axis)" stroke-width="2"/>
+          <circle cx="347" cy="156" r="5" fill="var(--base-gray)"/>
+          <circle cx="524" cy="156" r="5" fill="var(--blue)"/>
+          <text class="delta" x="536" y="160">+0.150</text>
+        </g>
+        <g><title>City street: 0.242 → 0.342, +0.100</title>
+          <text class="cls" x="0" y="202">City street</text>
+          <line x1="414" y1="198" x2="532" y2="198" stroke="var(--axis)" stroke-width="2"/>
+          <circle cx="414" cy="198" r="5" fill="var(--base-gray)"/>
+          <circle cx="532" cy="198" r="5" fill="var(--blue)"/>
+          <text class="delta" x="544" y="202">+0.100</text>
+        </g>
+      </svg>
+      <p class="note">Small-object recall of <b>0.079</b> means a distant pedestrian is still missed more than nine times out of ten. Publishing that number is the point: it is what deciding <b>not to ship on aggregate mAP</b> looks like in practice.</p>
+    </div>
+  </section>
+
+  <section class="section" id="thresholds">
+    <h2>Thresholds are product decisions</h2>
+    <p class="intro">A confidence threshold is not a tuning detail; it encodes <b>whose error costs more</b>. Sweeping thresholds on the fine-tuned model makes the trade explicit, then each class gets an operating point chosen against a stated miss-cost story.</p>
+
+    <div class="fig">
+      <h3>Precision / recall vs. confidence threshold</h3>
+      <p class="sub">fine-tuned model, all classes</p>
+      <div class="legend"><span class="prec">Precision</span><span class="rec">Recall</span></div>
+      <svg viewBox="0 0 640 292" role="img" aria-label="Line chart of precision rising and recall falling as the confidence threshold increases from 0.05 to 0.40. Chosen operating points marked at 0.05 for person and rider, and 0.15 for bike.">
+        <line class="gridline" x1="50" y1="196" x2="610" y2="196"/>
+        <line class="gridline" x1="50" y1="142" x2="610" y2="142"/>
+        <line class="gridline" x1="50" y1="88" x2="610" y2="88"/>
+        <line class="gridline" x1="50" y1="34" x2="610" y2="34"/>
+        <line class="axis" x1="50" y1="250" x2="610" y2="250"/>
+        <text class="tick" x="42" y="254" text-anchor="end">0</text>
+        <text class="tick" x="42" y="200" text-anchor="end">0.2</text>
+        <text class="tick" x="42" y="146" text-anchor="end">0.4</text>
+        <text class="tick" x="42" y="92" text-anchor="end">0.6</text>
+        <text class="tick" x="42" y="38" text-anchor="end">0.8</text>
+        <text class="tick" x="50" y="268" text-anchor="middle">0.05</text>
+        <text class="tick" x="210" y="268" text-anchor="middle">0.15</text>
+        <text class="tick" x="370" y="268" text-anchor="middle">0.25</text>
+        <text class="tick" x="610" y="268" text-anchor="middle">0.40</text>
+        <line class="chosen" x1="50" y1="18" x2="50" y2="250"/>
+        <line class="chosen" x1="210" y1="18" x2="210" y2="250"/>
+        <text class="tick" x="56" y="24">chosen: person &amp; rider (recall-first)</text>
+        <text class="tick" x="216" y="44">chosen: bike (best F1)</text>
+        <polyline points="50,174 130,139 210,112 290,89 370,65 450,51 610,32" fill="none" stroke="var(--blue)" stroke-width="2"/>
+        <polyline points="50,92 130,119 210,136 290,149 370,159 450,172 610,190" fill="none" stroke="var(--orange)" stroke-width="2"/>
+        <g fill="var(--blue)">
+          <circle cx="50" cy="174" r="4"><title>t=0.05 · precision 0.282</title></circle>
+          <circle cx="210" cy="112" r="4"><title>t=0.15 · precision 0.510</title></circle>
+          <circle cx="370" cy="65" r="4"><title>t=0.25 · precision 0.685</title></circle>
+          <circle cx="610" cy="32" r="4"><title>t=0.40 · precision 0.807</title></circle>
+        </g>
+        <g fill="var(--orange)">
+          <circle cx="50" cy="92" r="4"><title>t=0.05 · recall 0.584</title></circle>
+          <circle cx="210" cy="136" r="4"><title>t=0.15 · recall 0.421</title></circle>
+          <circle cx="370" cy="159" r="4"><title>t=0.25 · recall 0.335</title></circle>
+          <circle cx="610" cy="190" r="4"><title>t=0.40 · recall 0.221</title></circle>
+        </g>
+        <text class="val" x="618" y="32" fill="var(--blue)">.81</text>
+        <text class="val" x="618" y="194" fill="var(--orange)">.22</text>
+      </svg>
+    </div>
+
+    <div class="explorer" id="explorer">
+      <h3>Try it: move the operating point yourself</h3>
+      <p class="sub">Live numbers from the committed threshold sweep on the validation split (1,059 true VRU instances, all classes). No simulation, these are the measured counts.</p>
+      <div class="exp-slider">
+        <span class="tick" style="font-size:0.8rem;color:var(--muted)">safer</span>
+        <input type="range" id="exp-range" min="0" max="6" step="1" value="2" aria-label="Confidence threshold">
+        <span class="tick" style="font-size:0.8rem;color:var(--muted)">quieter</span>
+        <span class="tval" id="exp-t">0.15</span>
+      </div>
+      <div class="exp-tiles">
+        <div class="exp-tile"><div class="n" id="exp-p">0.510</div><div class="k">precision</div></div>
+        <div class="exp-tile"><div class="n" id="exp-r">0.421</div><div class="k">recall</div></div>
+        <div class="exp-tile"><div class="n" id="exp-tp">446</div><div class="k">true VRUs found</div></div>
+        <div class="exp-tile miss"><div class="n" id="exp-fn">613</div><div class="k">true VRUs missed</div></div>
+        <div class="exp-tile"><div class="n" id="exp-fp">428</div><div class="k">false alarms</div></div>
+      </div>
+      <div class="glyphs" id="exp-glyphs" aria-hidden="true"></div>
+      <p class="exp-read" id="exp-read"></p>
+    </div>
+
+    <table>
+      <tr><th>Class</th><th>Chosen threshold</th><th>P / R at that point</th><th>Why</th></tr>
+      <tr><td>person</td><td class="num">0.05</td><td class="num">0.291 / 0.605</td><td>Recall-first: within 95% of max recall, then highest precision. A missed pedestrian outweighs a false alarm.</td></tr>
+      <tr><td>rider</td><td class="num">0.05</td><td class="num">0.219 / 0.432</td><td>Same recall-first rule; riders share the person miss-cost profile.</td></tr>
+      <tr><td>bike</td><td class="num">0.15</td><td class="num">0.424 / 0.209</td><td>Best F1: false bike triggers were noisy relative to the recall they bought.</td></tr>
+    </table>
+  </section>
+
+  <section class="section" id="method">
+    <h2>Method</h2>
+    <p class="intro">Packaged so another engineer can reproduce the claim, not just admire it.</p>
+    <div class="steps">
+      <div class="step"><p><b>Normalize.</b> Pull a BDD100K road-scene subset and convert labels into a small VRU taxonomy (person, rider, bike) with lighting, weather, scene, and size metadata attached.</p></div>
+      <div class="step"><p><b>Measure the baseline.</b> Score a COCO-pretrained YOLO26n with metrics stratified by condition, never just mean AP.</p></div>
+      <div class="step"><p><b>Fine-tune.</b> Train on a VRU-preferring local split with oversampling of the rare classes.</p></div>
+      <div class="step"><p><b>Re-measure identically.</b> Same split, same strata, so every delta is attributable.</p></div>
+      <div class="step"><p><b>Choose operating points.</b> Sweep thresholds per class and pick against an explicit miss-vs-false-positive cost story, documented in the repo.</p></div>
+    </div>
+  </section>
+
+  <section class="section" id="limits">
+    <h2>What this is not</h2>
+    <div class="cards">
+      <div class="card"><h3>Not a deployment claim</h3><p>A CPU-trained nano model on a subsample. The claim is methodological: expose condition-specific risk and choose thresholds deliberately.</p></div>
+      <div class="card"><h3>Not solved</h3><p>Night-person recall 0.262 and small-object recall 0.079 are published as open product risk, not buried in an appendix.</p></div>
+      <div class="card"><h3>Not license-blind</h3><p>No BDD100K pixels or restricted weights are committed anywhere in the repo or its history. Test fixtures are synthetic.</p></div>
+      <div class="card"><h3>Not SOTA theater</h3><p>No leaderboard claims from a subsample. The model card states intended use and eight limitations.</p></div>
+    </div>
+    <div class="links">
+      <a href="https://github.com/nktarasios/vru-detect">Repository ↗</a>
+      <a href="https://github.com/nktarasios/vru-detect/blob/main/MODEL_CARD.md">Model card ↗</a>
+      <a href="https://github.com/nktarasios/vru-detect/blob/main/results/portfolio/ERROR_REPORT.md">Error report ↗</a>
+      <a href="https://github.com/nktarasios/vru-detect/blob/main/results/portfolio/FINDINGS.md">Findings ↗</a>
+    </div>
+  </section>
+
+  <footer>
+    <span>Nabil Khoury · <a href="https://nabilkhoury.com/">nabilkhoury.com</a></span>
+    <span><a href="https://nabilkhoury.com/projects/">Build log</a> · <a href="https://github.com/nktarasios">GitHub</a> · <a href="mailto:khouryn77@gmail.com">Email</a></span>
+  </footer>
+</main>
+<script>
+"use strict";
+const SWEEP = [
+  { t: "0.05", p: 0.282, r: 0.584, tp: 618, fp: 1571, fn: 441, note: "the chosen person/rider point: recall-first, because a missed pedestrian costs more than a false alarm" },
+  { t: "0.10", p: 0.411, r: 0.484, tp: 513, fp: 735, fn: 546 },
+  { t: "0.15", p: 0.510, r: 0.421, tp: 446, fp: 428, fn: 613, note: "the chosen bike point: best F1, because false bike triggers were noisy relative to the recall they bought" },
+  { t: "0.20", p: 0.596, r: 0.375, tp: 397, fp: 269, fn: 662 },
+  { t: "0.25", p: 0.685, r: 0.335, tp: 355, fp: 163, fn: 704, note: "the headline reporting point used in the charts above" },
+  { t: "0.30", p: 0.734, r: 0.287, tp: 304, fp: 110, fn: 755 },
+  { t: "0.40", p: 0.807, r: 0.221, tp: 234, fp: 56, fn: 825 }
+];
+const TOTAL = 1059;
+const range = document.getElementById("exp-range");
+const glyphBox = document.getElementById("exp-glyphs");
+const person = (fill) =>
+  `<svg viewBox="0 0 16 30"><circle cx="8" cy="5" r="4" fill="${fill ? "var(--blue)" : "none"}" stroke="${fill ? "var(--blue)" : "var(--axis)"}" stroke-width="1.5"/><path d="M8 10 L8 20 M8 13 L2 17 M8 13 L14 17 M8 20 L3 28 M8 20 L13 28" fill="none" stroke="${fill ? "var(--blue)" : "var(--axis)"}" stroke-width="2" stroke-linecap="round"/></svg>`;
+
+function render() {
+  const s = SWEEP[Number(range.value)];
+  document.getElementById("exp-t").textContent = s.t;
+  document.getElementById("exp-p").textContent = s.p.toFixed(3);
+  document.getElementById("exp-r").textContent = s.r.toFixed(3);
+  document.getElementById("exp-tp").textContent = s.tp.toLocaleString();
+  document.getElementById("exp-fn").textContent = s.fn.toLocaleString();
+  document.getElementById("exp-fp").textContent = s.fp.toLocaleString();
+  const found = Math.round(20 * s.tp / TOTAL);
+  let g = "";
+  for (let i = 0; i < 20; i++) g += person(i < found);
+  g += `<span class="cap">Each figure ≈ 53 of the ${TOTAL.toLocaleString()} true pedestrians, riders, and bikes in the split. Filled = detected at this threshold.</span>`;
+  glyphBox.innerHTML = g;
+  document.getElementById("exp-read").innerHTML =
+    `At <b>${s.t}</b>: the detector finds <b>${s.tp.toLocaleString()}</b> of ${TOTAL.toLocaleString()} true VRUs, misses <b>${s.fn.toLocaleString()}</b>, and raises <b>${s.fp.toLocaleString()}</b> false alarms.` +
+    (s.note ? ` This is ${s.note}.` : "");
+}
+range.addEventListener("input", render);
+render();
+</script>
+</body>
+</html>

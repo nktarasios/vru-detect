@@ -1,0 +1,73 @@
+stratum,value,class_id,class_name,precision,recall,tp,fp,fn
+timeofday,dawn/dusk,0,person,0.8387096774193549,0.29545454545454547,26,5,62
+timeofday,dawn/dusk,1,rider,0.03225806451612903,0.2,1,30,4
+timeofday,dawn/dusk,2,bike,0.0,0.0,0,0,5
+timeofday,dawn/dusk,__all__,all,0.43548387096774194,0.2755102040816326,27,35,71
+timeofday,daytime,0,person,0.7579365079365079,0.276410998552822,191,61,500
+timeofday,daytime,1,rider,0.03501945525291829,0.45,9,248,11
+timeofday,daytime,2,bike,0.8,0.0851063829787234,4,1,43
+timeofday,daytime,__all__,all,0.3968871595330739,0.2691292875989446,204,310,554
+timeofday,night,0,person,0.6578947368421053,0.14534883720930233,25,13,147
+timeofday,night,1,rider,0.075,0.25,3,37,9
+timeofday,night,2,bike,0.5,0.06666666666666667,1,1,14
+timeofday,night,__all__,all,0.3625,0.1457286432160804,29,51,170
+timeofday,undefined,0,person,0.75,0.75,3,1,1
+timeofday,undefined,1,rider,0.0,0.0,0,4,0
+timeofday,undefined,2,bike,0.0,0.0,0,0,0
+timeofday,undefined,__all__,all,0.375,0.75,3,5,1
+weather,clear,0,person,0.7352941176470589,0.22935779816513763,75,27,252
+weather,clear,1,rider,0.057692307692307696,0.3333333333333333,6,98,12
+weather,clear,2,bike,0.5,0.05,1,1,19
+weather,clear,__all__,all,0.3942307692307692,0.22465753424657534,82,126,283
+weather,overcast,0,person,0.8,0.27956989247311825,52,13,134
+weather,overcast,1,rider,0.029850746268656716,0.4,2,65,3
+weather,overcast,2,bike,0.5,0.07142857142857142,1,1,13
+weather,overcast,__all__,all,0.41044776119402987,0.2682926829268293,55,79,150
+weather,partly cloudy,0,person,0.7058823529411765,0.2608695652173913,12,5,34
+weather,partly cloudy,1,rider,0.0,0.0,0,17,2
+weather,partly cloudy,2,bike,0.0,0.0,0,0,0
+weather,partly cloudy,__all__,all,0.35294117647058826,0.25,12,22,36
+weather,rainy,0,person,0.8461538461538461,0.2894736842105263,11,2,27
+weather,rainy,1,rider,0.0,0.0,0,13,1
+weather,rainy,2,bike,0.0,0.0,0,0,0
+weather,rainy,__all__,all,0.4230769230769231,0.28205128205128205,11,15,28
+weather,snowy,0,person,0.782608695652174,0.24324324324324326,18,5,56
+weather,snowy,1,rider,0.0,0.0,0,23,1
+weather,snowy,2,bike,0.0,0.0,0,0,2
+weather,snowy,__all__,all,0.391304347826087,0.23376623376623376,18,28,59
+weather,undefined,0,person,0.7333333333333333,0.2711267605633803,77,28,207
+weather,undefined,1,rider,0.046296296296296294,0.5,5,103,5
+weather,undefined,2,bike,1.0,0.0967741935483871,3,0,28
+weather,undefined,__all__,all,0.39351851851851855,0.26153846153846155,85,131,240
+scene,city street,0,person,0.7614035087719299,0.2502883506343714,217,68,650
+scene,city street,1,rider,0.03819444444444445,0.3235294117647059,11,277,23
+scene,city street,2,bike,0.3333333333333333,0.021739130434782608,1,2,45
+scene,city street,__all__,all,0.3975694444444444,0.24181626187961985,229,347,718
+scene,highway,0,person,0.5,0.10526315789473684,2,2,17
+scene,highway,1,rider,0.0,0.0,0,4,0
+scene,highway,2,bike,0.0,0.0,0,0,0
+scene,highway,__all__,all,0.25,0.10526315789473684,2,6,17
+scene,parking lot,0,person,0.0,0.0,0,0,2
+scene,parking lot,1,rider,0.0,0.0,0,0,0
+scene,parking lot,2,bike,0.0,0.0,0,0,0
+scene,parking lot,__all__,all,0.0,0.0,0,0,2
+scene,residential,0,person,0.71875,0.36507936507936506,23,9,40
+scene,residential,1,rider,0.05555555555555555,0.6666666666666666,2,34,1
+scene,residential,2,bike,1.0,0.19047619047619047,4,0,17
+scene,residential,__all__,all,0.4027777777777778,0.3333333333333333,29,43,58
+scene,undefined,0,person,0.75,0.75,3,1,1
+scene,undefined,1,rider,0.0,0.0,0,4,0
+scene,undefined,2,bike,0.0,0.0,0,0,0
+scene,undefined,__all__,all,0.375,0.75,3,5,1
+size_bucket,large,0,person,0.6053511705685619,0.5838709677419355,181,118,129
+size_bucket,large,1,rider,0.03934426229508197,0.5,12,293,12
+size_bucket,large,2,bike,0.8333333333333334,0.10204081632653061,5,1,44
+size_bucket,large,__all__,all,0.32459016393442625,0.5169712793733682,198,412,185
+size_bucket,medium,0,person,0.2680851063829787,0.1926605504587156,63,172,264
+size_bucket,medium,1,rider,0.0041841004184100415,0.125,1,238,7
+size_bucket,medium,2,bike,0.0,0.0,0,4,11
+size_bucket,medium,__all__,all,0.13389121338912133,0.18497109826589594,64,414,282
+size_bucket,small,0,person,0.0051813471502590676,0.0031446540880503146,1,192,317
+size_bucket,small,1,rider,0.0,0.0,0,200,5
+size_bucket,small,2,bike,0.0,0.0,0,7,7
+size_bucket,small,__all__,all,0.0025,0.0030303030303030303,1,399,329

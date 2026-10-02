@@ -1,0 +1,13 @@
+# Metrics in results/ were produced with Python 3.11. Pin exact versions before attempting bit-for-bit reproduction.
+ultralytics>=8.4,<9
+torch>=2.0,<3
+torchvision
+pandas>=2.0
+matplotlib>=3.7
+pyyaml>=6.0
+pytest>=7.0
+pillow>=10.0
+opencv-python-headless>=4.8
+tqdm>=4.65
+numpy>=1.24
+huggingface_hub>=0.20

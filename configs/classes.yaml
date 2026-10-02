@@ -1,0 +1,36 @@
+# VRU classes we train/evaluate on
+vru_classes:
+  - person
+  - rider
+  - bike
+
+# YOLO training class indices (0-based)
+class_names:
+  0: person
+  1: rider
+  2: bike
+
+# Mapping from BDD / Hugging Face mirror categories to our class indices.
+# HF FiftyOne mirror (dgural/bdd100k) uses pedestrian/bicycle; we normalize
+# those aliases to person/bike during download (scripts/download_bdd_hf.py).
+bdd_to_yolo:
+  person: 0
+  rider: 1
+  bike: 2
+  # accepted aliases if raw labels are not pre-normalized
+  pedestrian: 0
+  bicycle: 2
+  other person: 0
+
+# For baseline eval: map our VRU classes to COCO class IDs used by pretrained YOLO
+# COCO: person=0, bicycle=1
+coco_mapping:
+  person: 0      # COCO person
+  rider: 0       # riders often detected as person in COCO-pretrained models; also check bicycle
+  bike: 1        # COCO bicycle
+
+# Also accept COCO detections as hits for these BDD classes when computing baseline
+baseline_coco_accept:
+  person: [0]           # person
+  rider: [0, 1]         # person or bicycle
+  bike: [1]             # bicycle
