@@ -1,0 +1,149 @@
+{
+  "retrieved_on": "2026-10-02",
+  "source_page": "https://www.nhtsa.gov/laws-regulations/standing-general-order-crash-reporting",
+  "archive_files": [
+    {
+      "system": "ADS",
+      "url": "https://static.nhtsa.gov/odi/ffdd/sgo-2021-01/Archive-2021-2025/SGO-2021-01_Incident_Reports_ADS.csv",
+      "bytes": 3943732,
+      "sha256": "cb2b38a21e2ce5c2337dfa0cffe8d6fce5e422cf93fe4c78942eec5cf72f41ba",
+      "last_modified": "Thu, 26 Mar 2026 20:12:34 GMT"
+    },
+    {
+      "system": "ADAS",
+      "url": "https://static.nhtsa.gov/odi/ffdd/sgo-2021-01/Archive-2021-2025/SGO-2021-01_Incident_Reports_ADAS.csv",
+      "bytes": 4092534,
+      "sha256": "99579d4c9add8f2fd0adfcff9199210fee8aaf9cbaf64347fd7adbb4446b6f5e",
+      "last_modified": "Thu, 26 Mar 2026 20:12:33 GMT"
+    },
+    {
+      "system": "OTHER",
+      "url": "https://static.nhtsa.gov/odi/ffdd/sgo-2021-01/Archive-2021-2025/SGO-2021-01_Incident_Reports_OTHER.csv",
+      "bytes": 1155114,
+      "sha256": "2464171f22671aa52047ed2e32a3442801ac85d4409f692acea3bf8c6c250899",
+      "last_modified": "Tue, 12 Aug 2025 13:28:43 GMT"
+    }
+  ],
+  "current_files": [
+    {
+      "system": "ADS",
+      "url": "https://static.nhtsa.gov/odi/ffdd/sgo-2021-01/SGO-2021-01_Incident_Reports_ADS.csv",
+      "bytes": 2581860,
+      "sha256": "f856d0b9cedc5f4447515c200eeacdff5d4cabf63003dcac207385eb466ff7f5",
+      "last_modified": "Tue, 15 Sep 2026 12:30:25 GMT"
+    },
+    {
+      "system": "ADAS",
+      "url": "https://static.nhtsa.gov/odi/ffdd/sgo-2021-01/SGO-2021-01_Incident_Reports_ADAS.csv",
+      "bytes": 2219159,
+      "sha256": "1b15d76e4b0c8bf211494ff98d31d6b3068f7addb160421bd174b79c498bc752",
+      "last_modified": "Tue, 15 Sep 2026 12:30:24 GMT"
+    },
+    {
+      "system": "OTHER",
+      "url": "https://static.nhtsa.gov/odi/ffdd/sgo-2021-01/SGO-2021-01_Incident_Reports_OTHER.csv",
+      "bytes": 28570,
+      "sha256": "542622998ba8d8bd322c27f50d2f8e3901a3db323642b5af1d252269b3c10d84",
+      "last_modified": "Tue, 15 Sep 2026 12:30:25 GMT"
+    }
+  ],
+  "archive": {
+    "rows_read": 9920,
+    "rows_by_system": {
+      "ADS": 2295,
+      "ADAS": 4027,
+      "OTHER": 3598
+    },
+    "unique_report_ids": 8160,
+    "latest_version_rows": 8160,
+    "after_excluding_no_new_reports": 4641,
+    "after_same_incident_collapse": 4218,
+    "same_incident_groups": 4178,
+    "rows_without_same_incident_id": 40,
+    "rows_removed_by_collapse": 423,
+    "groups_with_disagreeing_crash_with": 6,
+    "groups_with_mixed_pedestrian_and_cyclist": 0,
+    "vru_groups_with_disagreeing_lighting": 0,
+    "vru_codings_dropped_by_collapse": 0,
+    "vru_incidents": 64,
+    "vru_pedestrian": 21,
+    "vru_cyclist": 43,
+    "vru_by_system": {
+      "ADS": 44,
+      "ADAS": 19,
+      "OTHER": 1
+    }
+  },
+  "current": {
+    "rows_read": 3817,
+    "lighting_usable": false,
+    "lighting_included": false,
+    "vru_incidents": 30,
+    "vru_pedestrian": 9,
+    "vru_cyclist": 21,
+    "vru_codings_dropped_by_collapse": 1
+  },
+  "unmapped_lighting": [],
+  "alignment": {
+    "summary": "Primary check, pedestrian and cyclist incidents together versus all-VRU recall: the alignment rule is unmet. Pedestrian incidents versus person recall: the alignment rule is met. Cyclist incidents versus rider and bike recall: the alignment rule is unmet.",
+    "combined": {
+      "mode": [
+        "daytime"
+      ],
+      "lowest_recall": [
+        "night"
+      ],
+      "lines_up": false,
+      "counts": {
+        "daytime": 38,
+        "dawn/dusk": 3,
+        "night": 14,
+        "unknown": 9,
+        "other": 0
+      },
+      "recall": {
+        "daytime": 0.3548812664907652,
+        "dawn/dusk": 0.3673469387755102,
+        "night": 0.2412060301507537
+      },
+      "support": {
+        "daytime": 758.0,
+        "dawn/dusk": 98.0,
+        "night": 199.0
+      }
+    },
+    "pedestrian": {
+      "mode": [
+        "night"
+      ],
+      "lowest_recall": [
+        "night"
+      ],
+      "lines_up": true,
+      "counts": {
+        "daytime": 5,
+        "dawn/dusk": 1,
+        "night": 8,
+        "unknown": 7,
+        "other": 0
+      },
+      "recall": {
+        "daytime": 0.3646888567293777,
+        "dawn/dusk": 0.3863636363636363,
+        "night": 0.2616279069767442
+      },
+      "support": {
+        "daytime": 691.0,
+        "dawn/dusk": 88.0,
+        "night": 172.0
+      }
+    },
+    "cyclist_lines_up": false,
+    "cyclist_paragraph": "Cyclist incidents, paired with rider and bike recall: 43 incidents, 41 with a mapped lighting value (33 daytime, 2 dawn/dusk, 6 night), 2 unknown, 0 other. The alignment rule is unmet. The known-lighting mode is daytime. The lowest rider recall is night (recall 0.167, support 12). The lowest bike recall is night (recall 0.067, support 15)."
+  },
+  "recall_confidence": 0.25,
+  "crash_with_codes": [
+    "Non-Motorist: Pedestrian",
+    "Non-Motorist: Cyclist"
+  ]
+}

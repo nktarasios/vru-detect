@@ -74,10 +74,10 @@ NHTSA's own SGO reporting criteria single out crashes involving a "vulnerable ro
 - Produce per-class, per-condition precision/recall curves across a confidence-threshold sweep.
 - Choose and explicitly justify one recommended operating threshold per class, stating the tradeoff in the same language as prior work: "chosen to catch X% of pedestrian instances while keeping false-positive rate under Y%, given that a missed pedestrian detection is a materially worse failure mode than an extra false trigger."
 
-### Phase 4, Cross-Reference to SGO-Audit (stretch, does not block shipping Phases 0–3 as a complete deliverable)
-- Pull the condition fields (lighting, road type) already available from SGO-Audit's analysis of VRU-involved incidents.
-- Compare against this project's own stratified weak-performance buckets.
-- Report as a short, honest note, if the conditions line up, say so and show it; if they don't, say that too. This is a genuine check, not a result to force.
+### Phase 4, Cross-reference to the public NHTSA SGO archive
+- Read the public SGO 2021-01 incident files directly. Extract crashes coded as a pedestrian or cyclist, with their lighting and roadway fields.
+- Compare the lighting distribution with this project's recall by lighting.
+- Report the overlap in `results/sgo_crossref/finding.md`, with the counts and the query. A match and a non-match are both acceptable outcomes.
 
 ### Phase 5, Packaging
 - Single-image/small-batch inference demo script (deliberately not a live-video pipeline, see non-goals).

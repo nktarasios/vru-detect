@@ -1,0 +1,6 @@
+lighting_bucket,sgo_incidents,sgo_pedestrian,sgo_cyclist,sgo_share,sgo_share_of_known,finetuned_all_recall,finetuned_all_support,finetuned_person_recall,finetuned_person_support,finetuned_rider_recall,finetuned_rider_support,finetuned_bike_recall,finetuned_bike_support,baseline_all_recall,baseline_all_support,baseline_person_recall,baseline_person_support,baseline_rider_recall,baseline_rider_support,baseline_bike_recall,baseline_bike_support
+daytime,38,5,33,0.59375,0.6909090909090909,0.3548812664907652,758.0,0.3646888567293777,691.0,0.45,20.0,0.1702127659574468,47.0,0.2691292875989446,758.0,0.276410998552822,691.0,0.45,20.0,0.0851063829787234,47.0
+dawn/dusk,3,1,2,0.046875,0.05454545454545454,0.3673469387755102,98.0,0.3863636363636363,88.0,0.2,5.0,0.2,5.0,0.2755102040816326,98.0,0.2954545454545454,88.0,0.2,5.0,0.0,5.0
+night,14,8,6,0.21875,0.2545454545454545,0.2412060301507537,199.0,0.2616279069767442,172.0,0.1666666666666666,12.0,0.0666666666666666,15.0,0.1457286432160804,199.0,0.1453488372093023,172.0,0.25,12.0,0.0666666666666666,15.0
+unknown,9,7,2,0.140625,,,,,,,,,,,,,,,,,
+other,0,0,0,0.0,,,,,,,,,,,,,,,,,

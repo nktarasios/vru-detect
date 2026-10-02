@@ -70,8 +70,10 @@ Default to shipping code and instructions, not restricted data or weights.
    `python3 -m src.train --device auto`
 5. Evaluate tuned weights:
    `python3 -m src.evaluate --weights <path-to-best.pt> --device auto`
-6. Optionally cross-reference SGO-Audit data:
+6. Cross-reference the public NHTSA SGO archive with stratified recall:
    `python3 -m src.crossref_sgo`
+   This writes `results/sgo_crossref/finding.md`. Downloaded CSVs cache under
+   `data/downloads/sgo/` and stay gitignored.
 7. Run a demo folder:
    `python3 -m src.infer_demo --weights <path-to-best.pt> --images <folder> --device auto`
 8. Rebuild portfolio charts from committed CSVs:
