@@ -1,0 +1,65 @@
+system,report_id,same_incident_id,crash_with,party,lighting,lighting_bucket,roadway_type
+ADS,30410-10855,c397f44794adc7e,Non-Motorist: Cyclist,cyclist,Dark - Lighted,night,Intersection
+ADS,30270-8514,7fc8fab318eae00,Non-Motorist: Cyclist,cyclist,Dark - Lighted,night,Street
+ADS,30270-8685,df322c129346f66,Non-Motorist: Cyclist,cyclist,Dark - Lighted,night,Street
+ADS,30270-9015,7ba50d95e189af8,Non-Motorist: Cyclist,cyclist,Dark - Lighted,night,Street
+ADS,30412-1138,aed9b05ea58c626,Non-Motorist: Cyclist,cyclist,Dark - Lighted,night,Street
+ADS,30412-9204,92e33cb7fac29c6,Non-Motorist: Cyclist,cyclist,Dark - Lighted,night,Street
+ADS,30270-10768,3bed82ec870ce9c,Non-Motorist: Cyclist,cyclist,Dawn / Dusk,dawn/dusk,Intersection
+ADS,30270-2358,ca46961b61f690a,Non-Motorist: Cyclist,cyclist,Dawn / Dusk,dawn/dusk,Intersection
+ADS,1306-4389,03ad388e6676c05,Non-Motorist: Cyclist,cyclist,Daylight,daytime,Intersection
+ADAS,13781-10146,8cbc31da3b8d4ad,Non-Motorist: Cyclist,cyclist,Daylight,daytime,Intersection
+ADAS,13781-7638,2b14efb329173b9,Non-Motorist: Cyclist,cyclist,Daylight,daytime,Intersection
+ADAS,13781-8178,817f29e219971fc,Non-Motorist: Cyclist,cyclist,Daylight,daytime,Intersection
+ADS,30270-5855,1255ba62145d6e6,Non-Motorist: Cyclist,cyclist,Daylight,daytime,Intersection
+ADS,30270-6529,d088b81d0aea602,Non-Motorist: Cyclist,cyclist,Daylight,daytime,Intersection
+ADS,30270-7075,35b627077003d07,Non-Motorist: Cyclist,cyclist,Daylight,daytime,Intersection
+ADS,30270-9654,be9a4261e1e8663,Non-Motorist: Cyclist,cyclist,Daylight,daytime,Intersection
+ADS,30412-6145,250a095dea0e0fd,Non-Motorist: Cyclist,cyclist,Daylight,daytime,Intersection
+ADS,30531-33,67a8aed333e7a9d,Non-Motorist: Cyclist,cyclist,Daylight,daytime,Intersection
+ADS,30610-10399,ed38cb58ec4a1f5,Non-Motorist: Cyclist,cyclist,Daylight,daytime,Intersection
+ADS,30610-4810,28aee38d1d3ed89,Non-Motorist: Cyclist,cyclist,Daylight,daytime,Intersection
+ADS,540-6151,4a83312a10c2a30,Non-Motorist: Cyclist,cyclist,Daylight,daytime,Intersection
+ADS,30270-8039,46313087c8e64f4,Non-Motorist: Cyclist,cyclist,Daylight,daytime,Parking Lot
+ADS,30270-10075,7021e4061ead5bc,Non-Motorist: Cyclist,cyclist,Daylight,daytime,Street
+ADS,30270-11044,713a6738192af30,Non-Motorist: Cyclist,cyclist,Daylight,daytime,Street
+ADS,30270-5456,82fb19eb82e5406,Non-Motorist: Cyclist,cyclist,Daylight,daytime,Street
+ADS,30270-6134,811ca85e59b1678,Non-Motorist: Cyclist,cyclist,Daylight,daytime,Street
+ADS,30270-6344,1760af8f89bba3e,Non-Motorist: Cyclist,cyclist,Daylight,daytime,Street
+ADS,30270-8444,f0565ea7fcd398a,Non-Motorist: Cyclist,cyclist,Daylight,daytime,Street
+ADS,30270-9295,a4770372ceb27d6,Non-Motorist: Cyclist,cyclist,Daylight,daytime,Street
+ADS,30270-9987,45b81f06862d85c,Non-Motorist: Cyclist,cyclist,Daylight,daytime,Street
+ADS,30290-3135,38c8a93b3f13949,Non-Motorist: Cyclist,cyclist,Daylight,daytime,Street
+ADS,30290-3913,0bbd9f4a21e80a6,Non-Motorist: Cyclist,cyclist,Daylight,daytime,Street
+ADS,30412-2216,db822920fda66b7,Non-Motorist: Cyclist,cyclist,Daylight,daytime,Street
+ADS,30412-2588,71233f2d25b765e,Non-Motorist: Cyclist,cyclist,Daylight,daytime,Street
+ADS,30412-3281,1a8f11b1e58e6e7,Non-Motorist: Cyclist,cyclist,Daylight,daytime,Street
+ADS,30413-8218,7077c9c68260af9,Non-Motorist: Cyclist,cyclist,Daylight,daytime,Street
+ADS,30414-1540,73fa3c3b60dbdec,Non-Motorist: Cyclist,cyclist,Daylight,daytime,Street
+ADS,30610-2227,60fe7e3c889b2c0,Non-Motorist: Cyclist,cyclist,Daylight,daytime,Street
+ADS,30610-3752,1e802a0a2cb0266,Non-Motorist: Cyclist,cyclist,Daylight,daytime,Street
+ADS,30610-8201,ad0dcca9b823fd2,Non-Motorist: Cyclist,cyclist,Daylight,daytime,Street
+ADS,30792-5565,0ea292ae35cf3cd,Non-Motorist: Cyclist,cyclist,Daylight,daytime,Street
+OTHER,30610-3125, ,Non-Motorist: Cyclist,cyclist,Unknown,unknown,Intersection
+ADAS,62-1141,cca6853125aa31d,Non-Motorist: Cyclist,cyclist,Unknown,unknown,Intersection
+ADAS,13781-5685,71c10fe732e7ecd,Non-Motorist: Pedestrian,pedestrian,Dark - Lighted,night,Intersection
+ADS,30412-6175,558b2f6cb423a8b,Non-Motorist: Pedestrian,pedestrian,Dark - Lighted,night,Intersection
+ADS,30412-6395,8cb088f47f347b4,Non-Motorist: Pedestrian,pedestrian,Dark - Lighted,night,Intersection
+ADS,30610-3719,86aa35bdd11ea77,Non-Motorist: Pedestrian,pedestrian,Dark - Lighted,night,Parking Lot
+ADAS,13781-3847,01d6cd8be0b5d87,Non-Motorist: Pedestrian,pedestrian,Dark - Lighted,night,Street
+ADAS,13781-7069,173f6945ad096da,Non-Motorist: Pedestrian,pedestrian,Dark - Lighted,night,Street
+ADS,30270-9234,245053e3a6a403b,Non-Motorist: Pedestrian,pedestrian,Dark - Lighted,night,Street
+ADS,30412-3080,9d481ed6b4babd7,Non-Motorist: Pedestrian,pedestrian,Dark - Lighted,night,Street
+ADAS,13781-8004,3992b4e2e6ccdd3,Non-Motorist: Pedestrian,pedestrian,Dawn / Dusk,dawn/dusk,Highway / Freeway
+ADAS,13781-5100,ab0b7770c2dcdf4,Non-Motorist: Pedestrian,pedestrian,Daylight,daytime,Highway / Freeway
+ADAS,13781-11042,c54390a9bf59cbd,Non-Motorist: Pedestrian,pedestrian,Daylight,daytime,Intersection
+ADS,30291-7765,48d8ef946e000b8,Non-Motorist: Pedestrian,pedestrian,Daylight,daytime,Intersection
+ADAS,13781-4752,dc1151c6d47ce8b,Non-Motorist: Pedestrian,pedestrian,Daylight,daytime,Street
+ADAS,13781-7574,ae204cfacc3157a,Non-Motorist: Pedestrian,pedestrian,Daylight,daytime,Street
+ADAS,13781-3279,459d5c1dbb265c1,Non-Motorist: Pedestrian,pedestrian,Unknown,unknown,Highway / Freeway
+ADAS,13781-7197, ,Non-Motorist: Pedestrian,pedestrian,Unknown,unknown,Highway / Freeway
+ADAS,62-3542,bb9fbccee00be26,Non-Motorist: Pedestrian,pedestrian,Unknown,unknown,Highway / Freeway
+ADAS,13781-2635,2a316ca08ac2d09,Non-Motorist: Pedestrian,pedestrian,Unknown,unknown,Intersection
+ADAS,13781-2013,4992747ed123da4,Non-Motorist: Pedestrian,pedestrian,Unknown,unknown,Unknown
+ADAS,13781-21,ec246513f5a48c7,Non-Motorist: Pedestrian,pedestrian,Unknown,unknown,Unknown
+ADAS,13781-5986,bee279c62450c14,Non-Motorist: Pedestrian,pedestrian,Unknown,unknown,Unknown

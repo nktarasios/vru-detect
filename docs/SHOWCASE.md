@@ -31,7 +31,7 @@ If Pages is unavailable on a private free plan, either:
 | Shareable public URL | Pending | Public repo or external static host |
 | Demo frames | Pending | Run `src.infer_demo` locally (gitignored) |
 | Stronger absolute metrics | Optional | GPU / fuller BDD retrain |
-| SGO-Audit cross-ref | Optional | Provide SGO export |
+| SGO lighting cross-ref | Done | See `results/sgo_crossref/finding.md` |
 | Personal writeup linking the site | Optional | LinkedIn / blog post |
 
 “Done” for showcase purposes means: **one public URL** that a stranger can open

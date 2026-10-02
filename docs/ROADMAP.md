@@ -31,6 +31,8 @@ training time recorded.
 
 ## Phase B: The SGO cross-reference, for real
 
+**Status:** implemented. See `results/sgo_crossref/finding.md`.
+
 - Using the public NHTSA SGO archive directly (no dependency on another repo), extract crashes
   involving pedestrians or cyclists and their lighting and roadway fields.
 - Compare the lighting distribution of real VRU crashes with the detector's recall by lighting.

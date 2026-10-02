@@ -84,7 +84,7 @@ like `https://nktarasios.github.io/vru-detect/`. See [docs/SHOWCASE.md](docs/SHO
 | Optimize for VRU risk, not mAP vanity | Safety-relevant slice over generic CV homework | Stratified eval + night/small focus |
 | Cut live video and sensor fusion | Scope control; avoid hiding weak evaluation behind demo chrome | Explicit non-goals in PRD |
 | Thresholds are product choices | Missed pedestrian ≠ extra false box | Recall-first person/rider thresholds |
-| Honest non-result for SGO cross-ref | Do not force a narrative | `results/sgo_crossref/` note |
+| SGO lighting check uses the public archive | Count the overlap and publish the query | `results/sgo_crossref/finding.md` |
 | Ship code + repro, not restricted weights | License-aware open source | No raw BDD / no committed checkpoints |
 
 ## Headline results
@@ -132,7 +132,7 @@ src/dataset.py               # BDD → YOLO + conditions.csv
 src/baseline_eval.py         # Phase 1 stratified baseline
 src/train.py                 # Phase 2 fine-tune + VRU oversampling
 src/evaluate.py              # Phase 3 stratified eval + threshold sweep
-src/crossref_sgo.py          # Phase 4 optional SGO alignment check
+src/crossref_sgo.py          # Public NHTSA SGO lighting cross-reference
 src/infer_demo.py            # Phase 5 annotated demo export
 scripts/build_portfolio_figures.py
 ```
@@ -194,8 +194,10 @@ These are intentional open edges, not surprises:
 1. **Scale:** GPU + full official BDD train split should raise absolute metrics.
 2. **Small / night:** current residual risk; next levers are resolution, tiling,
    night-heavy sampling, and class-specific augmentation.
-3. **SGO cross-ref:** ready when an SGO-Audit export is available; currently an
-   honest non-result.
+3. **SGO lighting field:** the pre-June 2025 archive is cross-referenced in
+   `results/sgo_crossref/finding.md`. Third-amendment files have no Lighting
+   column, so later pedestrian and cyclist crashes are counted and left out
+   of the lighting table.
 4. **Demo gallery:** run `infer_demo` locally after training to attach annotated
    frames for writeups (outputs are gitignored by license posture).
 

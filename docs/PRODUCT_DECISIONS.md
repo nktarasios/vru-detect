@@ -80,13 +80,22 @@ hides the product decision.
 | rider | 0.05 | Same miss-cost logic as person |
 | bike | 0.15 | Best F1; bike false positives were less worth extreme recall chasing |
 
-## 7. Portfolio continuity with SGO-Audit
+## 7. Portfolio continuity with the public SGO archive
 
-**Decision:** Keep Phase 4 as a real check, not a forced narrative.
+**Decision:** Compare the detector's recall by lighting with pedestrian and
+cyclist crashes in the public NHTSA SGO 2021-01 archive. Report the overlap
+with the counts and the query, whether the alignment rule is met or unmet.
 
-**Current state:** SGO-Audit export was unavailable, so the repo records an
-honest non-result (`results/sgo_crossref/`). A clean non-finding is preferable
-to a fabricated alignment story.
+**Why:** An SGO-Audit export from another repo was never available here. The
+public archive is the file set that actually carries Lighting and Roadway Type.
+
+**Current state:** `python3 -m src.crossref_sgo` writes
+`results/sgo_crossref/finding.md`. On the 2026-10-02 retrieval, the combined
+pedestrian-plus-cyclist check leaves the alignment rule unmet: daylight is the
+crash mode and night is the lowest fine-tuned recall. The pedestrian slice
+meets the rule on a small count, with unknown lighting close to that mode.
+The cyclist slice leaves the rule unmet. The finding holds the counts, the
+query, and the limits.
 
 ## 8. What "done" means for this portfolio piece
 

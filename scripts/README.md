@@ -108,6 +108,25 @@ python3 scripts/build_error_report.py
 
 Writes `results/portfolio/ERROR_REPORT.md`.
 
+## `src/crossref_sgo.py`
+
+Read the public NHTSA Standing General Order 2021-01 CSVs and compare the
+lighting of pedestrian and cyclist crashes with the committed stratified
+recall tables:
+
+```bash
+python3 -m src.crossref_sgo
+```
+
+Writes `results/sgo_crossref/finding.md` plus the count tables and `query.json`
+next to it. The script downloads the archive directly from `static.nhtsa.gov`
+and caches the CSVs under `data/downloads/sgo/` (gitignored). Pass `--refresh`
+to download again.
+
+The lighting comparison uses the pre-third-amendment archive, which has a
+Lighting column. Third-amendment files are counted and left out of that table
+when Lighting is absent. No other repository is required.
+
 ## `reproduce.sh`
 
 End-to-end reproduction helper (install deps, download, convert, baseline,

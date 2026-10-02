@@ -14,6 +14,7 @@ python3 -m src.train --device auto
 python3 -m src.evaluate --weights models/vru_best.pt --device auto
 python3 scripts/build_portfolio_figures.py
 python3 scripts/build_error_report.py
+python3 -m src.crossref_sgo
 
 echo
 echo "Optional demo (writes gitignored outputs/demo):"

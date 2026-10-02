@@ -17,7 +17,7 @@ vru-detect/
 │   ├── baseline_eval.py             # Phase 1: pretrained model, stratified eval
 │   ├── train.py                     # Phase 2: fine-tuning
 │   ├── evaluate.py                  # Phase 3: stratified post-fine-tune eval + threshold selection
-│   ├── crossref_sgo.py              # Phase 4 (stretch): compare against SGO-Audit findings
+│   ├── crossref_sgo.py              # Phase 4: public NHTSA SGO lighting cross-reference
 │   └── infer_demo.py                # Phase 5: single-image/small-batch inference demo
 ├── configs/
 │   ├── classes.yaml                 # VRU class list + dataset taxonomy mapping
@@ -90,12 +90,13 @@ No web framework, no deployment infra, no live video handling.
 
 ---
 
-## 7. Phase 4, Cross-Reference to SGO-Audit (`crossref_sgo.py`, stretch)
+## 7. Phase 4, SGO cross-reference (`crossref_sgo.py`)
 
-- Pull SGO-Audit's already-computed condition breakdown for VRU-involved incidents (lighting, road type fields).
-- Compare against this project's own weakest-performing condition strata from Phase 3.
-- Report plainly: do the model's blind spots line up with where real VRU crashes cluster in the SGO data, or not? Either answer is a legitimate, reportable result, do not adjust the framing to force a match if the data doesn't support one.
-- This step depends on SGO-Audit's output format; if SGO-Audit's condition data isn't structured in a directly comparable way, a light adapter script is fine, don't rebuild SGO-Audit's analysis from scratch to make this work.
+- Read the public NHTSA SGO 2021-01 CSVs directly. Do not depend on another repo.
+- Keep pedestrian and cyclist incidents (`Crash With` of `Non-Motorist: Pedestrian` or `Non-Motorist: Cyclist`) after latest-version and `Same Incident ID` reduction. Extract Lighting and Roadway Type.
+- Use the pre-third-amendment archive for lighting. The third-amendment files drop that column; count those crashes and leave them out of the lighting table.
+- Compare the lighting distribution with fine-tuned recall by time of day from `results/finetuned/stratified.csv` (confidence 0.25). The alignment rule is documented in the generated note.
+- Write `results/sgo_crossref/finding.md` with the counts and the query. A met rule and an unmet rule are both valid outcomes.
 
 ---
 
@@ -126,7 +127,7 @@ No web framework, no deployment infra, no live video handling.
 - [x] No dataset files committed to git history (gitignore `data/raw/`)
 - [x] Portfolio decision log + findings charts (`docs/PRODUCT_DECISIONS.md`, `results/portfolio/`)
 - [ ] Optional: attach local `infer_demo` gallery for interviews (gitignored outputs)
-- [ ] Optional: Phase 4 SGO cross-ref when audit export is available
+- [x] Phase 4 SGO cross-ref against the public NHTSA archive (`results/sgo_crossref/finding.md`)
 
 ---
 
@@ -146,8 +147,8 @@ Run these in order, one at a time, confirm each phase works before moving to the
 **Prompt 4, Phase 3:**
 > Implement `src/evaluate.py` per Section 6: repeat the Phase 1 stratified evaluation on the fine-tuned model using identical strata and metrics, sweep confidence thresholds, and produce one recommended operating threshold per class with explicit tradeoff justification in the output.
 
-**Prompt 5, Phase 4 (optional, only after SGO-Audit exists):**
-> Implement `src/crossref_sgo.py` per Section 7: compare this project's weakest-performing condition strata against SGO-Audit's VRU-incident condition breakdown. Report the result plainly whether or not it shows alignment, do not force a narrative either way.
+**Prompt 5, Phase 4:**
+> Implement `src/crossref_sgo.py` per Section 7: read the public NHTSA SGO archive, extract pedestrian and cyclist crashes with lighting and roadway, and compare that lighting distribution with stratified recall. Report the result plainly whether or not it shows alignment.
 
 **Prompt 6, Phase 5:**
 > Implement `src/infer_demo.py` and write `MODEL_CARD.md` and `README.md` per Section 8. Include the baseline-vs-fine-tuned comparison table and the chosen thresholds with justification directly in the README.
